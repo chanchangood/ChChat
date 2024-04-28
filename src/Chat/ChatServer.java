@@ -96,27 +96,27 @@ class ChatThread extends Thread {
                     break;
                 }
 
-                if (msg.indexOf("/create") == 0) {
-                    chattingRooms.add(roomNumber - 1, new ChattingRoom(roomNumber, clientSocket, chatClients));
-                    out.println("채팅 룸 " + roomNumber + " 번을 생성하고 입장하셨습니다.");
-                    System.out.println(nickname + " 님이 " + roomNumber + "번 채팅룸을 생성했습니다.");
-                    chattingRooms.get(roomNumber - 1).joinRoom(msg);
-                    roomNumber++;
-                }
-
-                if (msg.indexOf("/list") == 0) {
-                    out.println(chattingRooms.size() + "번 까지의 방이 있습니다.");
-
-                }
-
-                if (msg.indexOf("/exit") == 0) {
-                    chattingRooms.get(roomNumber).exitRoom();
-
-                }
-
-                if (msg.indexOf("/join") == 0) {
-
-                }
+//                if (msg.indexOf("/create") == 0) {
+//                    chattingRooms.add(roomNumber - 1, new ChattingRoom(roomNumber, clientSocket, chatClients));
+//                    out.println("채팅 룸 " + roomNumber + " 번을 생성하고 입장하셨습니다.");
+//                    System.out.println(nickname + " 님이 " + roomNumber + "번 채팅룸을 생성했습니다.");
+//                    chattingRooms.get(roomNumber - 1).joinRoom(msg);
+//                    roomNumber++;
+//                }
+//
+//                if (msg.indexOf("/list") == 0) {
+//                    out.println(chattingRooms.size() + "번 까지의 방이 있습니다.");
+//
+//                }
+//
+//                if (msg.indexOf("/exit") == 0) {
+//                    chattingRooms.get(roomNumber).exitRoom();
+//
+//                }
+//
+//                if (msg.indexOf("/join") == 0) {
+//
+//                }
 
                 if (msg.indexOf("/whisper") == 0) {
                     whisper(msg);
@@ -198,30 +198,30 @@ class ChattingRoom {
     }
 
 
-    public void joinRoom(String msg) {
-        try {
-            while ((msg = in.readLine()) != null) {
+//    public void joinRoom(String msg) {
+//        try {
+//            while ((msg = in.readLine()) != null) {
+//
+//
+//            }
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//
+//        }
+//
+//    }
 
+//    public void exitRoom() {
+//
+//    }
 
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-
-        }
-
-    }
-
-    public void exitRoom() {
-
-    }
-
-    public void broadcastRoom() {
+//    public void broadcastRoom() {
 //        for (PrintWriter out : roomClients.values()) {
 //            out.println(msg);
 //        }
-
-    }
+//
+//    }
 
 }
