@@ -75,7 +75,7 @@ class ChatThread extends Thread {
                     "방 입장 : /join [방번호]\n" +
                     "방 나가기 : /exit\n" +
                     "접속종료 : /bye\n" +
-                    "귓속말 : /whisper\n");
+                    "귓속말 : /whisper [대상의 닉네임] [보낼 메시지]\n");
             System.out.println("새로운 사용자 " + nickname + " 님이 채팅 서버에 입장하였습니다. 서버 로비로 이동하였습니다.");
             InetAddress address = clientSocket.getInetAddress();
             System.out.println(nickname + " 님의 IP주소: " + address);
@@ -106,8 +106,13 @@ class ChatThread extends Thread {
                 }
 
                 if (msg.indexOf("/create") == 0) {
+                    if (chattingRooms.isEmpty()) {
+                        roomNumber = 0;
+                    } else {
+                        roomNumber = chattingRooms.size();
+                    }
                     chattingRooms.add(roomNumber, new ChattingRoom(msg));
-                    chattingRooms.get(roomNumber).joinRoom(roomNumber);
+                    chattingRooms.get(roomNumber).joinRoom(roomNumber, nickname);
                     inRoom = 1;
 
                 } else if (msg.indexOf("/list") == 0) {
@@ -118,7 +123,7 @@ class ChatThread extends Thread {
                         out.println("잘못된 명령어 입니다.");
                     } else {
                         roomNumber = getRoom(msg);
-                        chattingRooms.get(roomNumber).joinRoom(roomNumber);
+                        chattingRooms.get(roomNumber).joinRoom(roomNumber, nickname);
                     }
                     inRoom = 1;
                 } else if (msg.indexOf("/whisper") == 0) {
@@ -207,19 +212,9 @@ class ChatThread extends Thread {
 
 
     class ChattingRoom {
-        private int roomNumber;
         private Map<String, PrintWriter> roomClients;
-        private String nickName;
 
         public ChattingRoom(String msg) {
-            this.nickName = nickname;
-
-            if (roomNumber != 0) {
-                roomNumber = 1;
-                while (chattingRooms.size() < roomNumber + 1) {
-                    roomNumber++;
-                }
-            }
             roomClients = new HashMap<>();
 
 
@@ -227,12 +222,14 @@ class ChatThread extends Thread {
             System.out.println(nickname + " 님이 " + roomNumber + "번 채팅룸을 생성했습니다.");
         }
 
-        public void joinRoom(int roomNumber) {
+        public void joinRoom(int roomNumber, String clientName) {
             try {
                 synchronized (roomClients) {
-                    roomClients.put(nickname, chatClients.get(nickname));
+                    roomClients.put(clientName, chatClients.get(clientName));
                 }
-                roomClients.get(nickname).println(roomNumber + "번 방에 " + nickname + " 님이 입장하였습니다.");
+
+                broadcastRoom((roomNumber + "번 방에 " + clientName + " 님이 입장하였습니다."));
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
