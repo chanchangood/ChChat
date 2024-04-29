@@ -103,9 +103,7 @@ class ChatThread extends Thread {
                     inRoom = -1;
                     chattingRooms.get(roomNumber).broadcastRoom(nickname + " 닉네임의 사용자가 채팅방을 나갔습니다.");
                     chattingRooms.get(roomNumber).exitRoom(msg);
-                }
-
-                if (msg.indexOf("/create") == 0) {
+                }else if (msg.indexOf("/create") == 0) {
                     if (chattingRooms.isEmpty()) {
                         roomNumber = 0;
                     } else {
