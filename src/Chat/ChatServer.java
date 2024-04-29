@@ -74,8 +74,10 @@ class ChatThread extends Thread {
                     "방 생성 : /create\n" +
                     "방 입장 : /join [방번호]\n" +
                     "방 나가기 : /exit\n" +
-                    "접속종료 : /bye\n" +
-                    "귓속말 : /whisper [대상의 닉네임] [보낼 메시지]\n");
+                    "귓속말 : /whisper [대상의 닉네임] [보낼 메시지]\n" +
+                    "전체 유저 확인 : /users\n" +
+                    "채팅방 안의 유저 확인 : /roomusers\n" +
+                    "접속종료 : /bye\n");
             System.out.println("새로운 사용자 " + nickname + " 님이 채팅 서버에 입장하였습니다. 서버 로비로 이동하였습니다.");
             InetAddress address = clientSocket.getInetAddress();
             System.out.println(nickname + " 님의 IP주소: " + address);
@@ -103,7 +105,7 @@ class ChatThread extends Thread {
                     inRoom = -1;
                     chattingRooms.get(roomNumber).broadcastRoom(nickname + " 닉네임의 사용자가 채팅방을 나갔습니다.");
                     chattingRooms.get(roomNumber).exitRoom(msg);
-                }else if (msg.indexOf("/create") == 0) {
+                } else if (msg.indexOf("/create") == 0) {
                     if (chattingRooms.isEmpty()) {
                         roomNumber = 0;
                     } else {
@@ -124,6 +126,14 @@ class ChatThread extends Thread {
                         chattingRooms.get(roomNumber).joinRoom(roomNumber, nickname);
                     }
                     inRoom = 1;
+                } else if (msg.indexOf("/users") == 0) {
+                    for (String nicknames : chatClients.keySet()) {
+                        out.println(nicknames);
+                    }
+                } else if (msg.indexOf("/roomusers") == 0) {
+                    for (String nicknames : chattingRooms.get(roomNumber).roomClients.keySet()) {
+                        out.println(nicknames);
+                    }
                 } else if (msg.indexOf("/whisper") == 0) {
                     whisper(msg);
                 } else if (inRoom == -1) {
@@ -219,6 +229,7 @@ class ChatThread extends Thread {
             out.println("채팅 룸 " + roomNumber + " 번을 생성하고 입장하셨습니다.");
             System.out.println(nickname + " 님이 " + roomNumber + "번 채팅룸을 생성했습니다.");
         }
+
 
         public void joinRoom(int roomNumber, String clientName) {
             try {
